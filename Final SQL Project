@@ -1,0 +1,55 @@
+#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data.
+
+#1 Show Customers(their full names, customer ID, and country) who are not in the US.BIT_DB
+SELECT firstname, lastname, customerid, country
+FROM chinook.customers
+WHERE country <> 'USA';
+
+#2 Show only the customers from Brazil
+SELECT *
+FROM chinook.customers
+WHERE country = 'Brazil';
+
+#3 Find the invoices of customers who are from Brazil.  The resulting table should show the customers full name, invoice ID, date of the invoice, and billing country.
+SELECT c.firstname, c.lastname, i.invoiceid, i.billingcountry, i.invoicedate 
+FROM chinook.invoices AS i
+LEFT JOIN chinook.customers AS c
+ON i.customerid = c.customerid
+WHERE i.billingcountry = 'Brazil';
+
+#4 Show the Employees who are Sales Agents
+SELECT *
+FROM chinook.employees
+WHERE title = 'Sales Support Agent';
+
+#5 Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agents full name,
+SELECT emp.Lastname, emp.Firstname, inv.InvoiceID
+FROM chinook.Employees emp
+INNER JOIN chinook.Customers cust ON cust.SupportRepID = emp.EmployeeID
+INNER JOIN chinook.Invoices Inv ON Inv.CustomerID = cust.CustomerID;
+
+#6 Show the invoice total, customer name, country, and sales agent name for all invoices and customers
+SELECT emp.LastName, emp.Firstname, cust.FirstName, cust.LastName, cust.Country, inv.total
+FROM chinook.Employees emp
+INNER JOIN chinook.Customers cust ON cust.SupportRepID = emp.EmployeeID
+INNER JOIN chinook.Invoices Inv ON Inv.CustomerID = cust.CustomerID;
+
+#7 How many invoices were there in 2009?
+SELECT COUNT(*)
+FROM chinook.invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+#8 Provide a query that shows all the tracks, and include the album name, media type, and genre
+SELECT t.Name AS 'Track Name', a.Title AS 'Album Title', m.Name AS 'Media Type', g.Name AS 'Genre'
+FROM chinook.tracks t
+JOIN chinook.Albums a 
+on a.AlbumId = t.AlbumId
+JOIN chinook.Media_Types m
+on m.MediaTypeId = t.MediaTypeId
+JOIN chinook.Genres g
+on g.GenreId = t.GenreId;
+
+#9 Provide a list of all employees and their titles with a birthdate in August
+SELECT *
+FROM chinook.employees 
+WHERE BirthDate LIKE '%-08-%';
